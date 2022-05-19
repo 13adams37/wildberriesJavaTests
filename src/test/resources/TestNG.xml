@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="wildberriesTest">
+    <listeners>
+        <listener class-name="listeners.CustomListener"/>
+        <listener class-name="listeners.RetryListener"/>
+    </listeners>
+    <parameter name="BROWSER" value="${BROWSER}"/>
+    <test name="Test examples">
+        <packages>
+            <package name="tests"/>
+        </packages>
+    </test>
+</suite>

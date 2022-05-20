@@ -2,7 +2,6 @@ package pages;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.conditions.Visible;
 import io.qameta.allure.Step;
 import org.testng.Assert;
 
@@ -27,10 +26,7 @@ public class WildberriesMainPage {
 
     @Step("Проверка отображения города доставки (столица)")
     public void checkCountyDeliveryCity(String countryCode) {
-        // задерка загрузки
-
-        String city = countryCity.shouldBe(Condition.exist).text();
-        Assert.assertEquals(city, transformCountryCodeToLanguage(countryCode)[1]);
+        countryCity.shouldHave(Condition.exactText(transformCountryCodeToLanguage(countryCode)[1]));
         logger.info("ok");
     }
 

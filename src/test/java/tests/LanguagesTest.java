@@ -28,6 +28,7 @@ public class LanguagesTest extends BasePage {
     public void checkLanguages(String languageCode) {
         wildberriesMainPage.pressButtonWithLanguage(languageCode);
         checkUrl("https://" + languageCode.toLowerCase() + ".wildberries.ru", 5);
+        wildberriesMainPage.checkCountyDeliveryCity(languageCode);
     }
 
 }

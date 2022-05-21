@@ -14,7 +14,8 @@ public class WildberriesMainPage {
     private final SelenideElement
 
             countryHover = $x("//span[@data-wba-header-name='Country']"),
-            countryCity = $x("//span[@data-wba-header-name='DLV_Adress']");
+            countryCity = $x("//span[@data-wba-header-name='DLV_Adress']"),
+            searchInput = $("#searchInput");
 
 
     @Step("Нажать на кнопку выбора языка")
@@ -28,6 +29,13 @@ public class WildberriesMainPage {
     public void checkCountyDeliveryCity(String countryCode) {
         countryCity.shouldHave(Condition.exactText(transformCountryCodeToLanguage(countryCode)[1]));
         logger.info("ok");
+    }
+
+    @Step("Поиск '{productName}'")
+    public void searchProduct(String productName) {
+        searchInput.click();
+        searchInput.sendKeys(productName);
+        searchInput.pressEnter();
     }
 
 }

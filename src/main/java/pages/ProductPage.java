@@ -1,13 +1,9 @@
 package pages;
 
-import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
-import org.testng.Assert;
+import io.qameta.allure.Step;
 
-import java.util.Collection;
-
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$x;
 
 
@@ -22,14 +18,17 @@ public class ProductPage {
 
     public String[] productDetails;
 
+    @Step("Добавить товар в корзину")
     public void addProductToBasket() {
         addToCartButton.click();
     }
 
+    @Step("Перейти в корзину с кнопки страницы товара")
     public void goToBasket() {
         goToCartButton.shouldBe(Condition.visible).click();
     }
 
+    @Step("Сохранить детали товара")
     public void getProductDetails() {
         String brandName = productBrandName.text();
         String goodsName = productGoodsName.text();
@@ -38,15 +37,4 @@ public class ProductPage {
         productDetails = new String[]{brandName, goodsName, price, sellerName};
     }
 
-//    public void assertProductDetails(String productId) {
-//        String cartProductBrandName = $x("//div[@data-nm='"+ productId +"']/../a/span[@class='good-info__good-name']").text();
-//        String cartProductGoodsName = $x("//div[@data-nm='"+ productId +"']/../a/span[@class='good-info__good-brand']").text();
-//        String cartProductPrice = $x("//div[@data-nm='"+ productId +"']/../../../div[@class=\"list-item__price\"]/div[1]']").text();
-//        String cartProductSeller = $x("//div[@data-nm='"+ productId +"']/div/div/div/span[@class=\"seller__name seller__name--short\"]").text();
-//
-//        Assert.assertEquals(cartProductBrandName, productDetails[0]);
-//        Assert.assertEquals(cartProductGoodsName, productDetails[1]);
-//        Assert.assertEquals(cartProductPrice, productDetails[2]);
-//        Assert.assertEquals(cartProductSeller, productDetails[3]);
-//    }
 }

@@ -2,12 +2,14 @@ package pages;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
 import org.testng.Assert;
 
 import static com.codeborne.selenide.Selenide.$x;
 
 public class BasketPage {
 
+    @Step("Проверка детелай товара в корзине")
     public void assertProductDetailsInBasket(String productId, String[] productDetails) {
         String cartProductBrandName = $x("//div[@data-nm='" + productId + "']/../a/span[@class='good-info__good-brand']").text();
         String cartProductGoodsName = $x("//div[@data-nm='" + productId + "']/../a/span[@class='good-info__good-name']").text();

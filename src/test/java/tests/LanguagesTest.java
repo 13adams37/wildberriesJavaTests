@@ -1,5 +1,6 @@
 package tests;
 
+import org.testng.SkipException;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -14,8 +15,8 @@ public class LanguagesTest extends BasePage {
     @DataProvider
     public Object[][] languageCodes() {
         return new Object[][]{
-                {"AM"}, {"BY"}, {"KZ"}, {"KG"}, {"UZ"}, {"WWW"}, {"IL"}
-                //WWW == RU
+                {"WWW"}, {"AM"}, {"BY"}, {"IL"}, {"KZ"}, {"KG"}, {"UZ"}
+                // WWW == RU
         };
     }
 
@@ -26,6 +27,8 @@ public class LanguagesTest extends BasePage {
 
     @Test(dataProvider = "languageCodes")
     public void checkLanguages(String languageCode) {
+        if (languageCode.equals("IL") || languageCode.equals("KG"))
+            throw new SkipException("Different frontend branch");
         wildberriesMainPage.pressButtonWithLanguage(languageCode);
         checkUrl("https://" + languageCode.toLowerCase() + ".wildberries.ru", 5);
         wildberriesMainPage.checkCountyDeliveryCity(languageCode);

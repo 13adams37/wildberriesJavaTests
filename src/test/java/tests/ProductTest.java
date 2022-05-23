@@ -7,7 +7,6 @@ import pages.BasePage;
 import test_data.Urls;
 
 import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.Selenide.sleep;
 
 public class ProductTest extends BasePage {
     String productId = "47475063";

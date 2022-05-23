@@ -18,20 +18,20 @@ public class WildberriesMainPage {
             searchInput = $("#searchInput");
 
 
-    @Step("Нажать на кнопку выбора языка")
+    @Step("Нажать на кнопку языка '{countryCode}'")
     public void pressButtonWithLanguage(String countryCode) {
         countryHover.hover();
         $x("//input[@value='" + transformCountryCodeToLanguage(countryCode)[0] + "']/..").click();
         logger.info("ok");
     }
 
-    @Step("Проверка отображения города доставки (столица)")
+    @Step("Проверка отображения города доставки '{countryCode}'")
     public void checkCountyDeliveryCity(String countryCode) {
         countryCity.shouldHave(Condition.exactText(transformCountryCodeToLanguage(countryCode)[1]));
         logger.info("ok");
     }
 
-    @Step("Поиск '{productName}'")
+    @Step("Поиск товара '{productName}'")
     public void searchProduct(String productName) {
         searchInput.click();
         searchInput.sendKeys(productName);

@@ -30,7 +30,7 @@ public class LanguagesTest extends BasePage {
         if (languageCode.equals("IL") || languageCode.equals("KG"))
             throw new SkipException("Different frontend branch");
         wildberriesMainPage.pressButtonWithLanguage(languageCode);
-        checkUrl("https://" + languageCode.toLowerCase() + ".wildberries.ru", 5);
+        checkUrl("https://" + languageCode.toLowerCase() + ".wildberries.ru");
         wildberriesMainPage.checkCountyDeliveryCity(languageCode);
     }
 

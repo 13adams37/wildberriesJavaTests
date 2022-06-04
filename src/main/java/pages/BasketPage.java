@@ -1,21 +1,29 @@
 package pages;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 import org.openqa.selenium.Keys;
 import org.testng.Assert;
 
-import java.util.Objects;
 
 import static com.codeborne.selenide.Selenide.$x;
 
 public class BasketPage {
 
     private final SelenideElement
+            totalPriceText = $x("//p[@class='b-top__total line']/span/span[@data-link='{formatMoneyAnim totalPriceWithCouponPersDiscAndDeliveryPrice}']"),
+            productsFinalPrice = $x("//div[@data-link='{formatMoneyAnim (priceSumWithCouponAndDiscount)}']"),
+            popupAlertInvalidData = $x("//div[@class='popup-alert shown centered']"),
             emptyBasket = $x("//div[@class='basket-page__basket-empty basket-empty']"),
             emptyBasketText = $x("//div[@class='basket-page__basket-empty basket-empty']/h1");
+
+    @Step("Проверка отображения алерта об ошибке входных данных")
+    public void catchInvalidDataPopup() {
+        popupAlertInvalidData.shouldBe(Condition.visible);
+        popupAlertInvalidData.lastChild().click();
+        popupAlertInvalidData.shouldNotBe(Condition.visible);
+    }
 
     @Step("Проверка детелай товара '{productId}' в корзине")
     public void assertProductDetailsInBasket(String productId, String[] productDetails) {
@@ -39,25 +47,20 @@ public class BasketPage {
     }
 
     @Step("Проверка пустоты корзины")
-    public void checkBasketEmptiness(){
+    public void checkBasketEmptiness() {
         emptyBasket.shouldBe(Condition.visible);
         emptyBasketText.shouldBe(Condition.exactText("В корзине пока ничего нет"));
     }
 
-    @Step("Увеличение количества товара '{productId}' на '{changeTo}' в корзине")
-    public void addProductAmount(String productId, int changeTo) {
-        SelenideElement addMoreButton = $x("//div[@data-nm='" + productId + "']/../../../div[@class='list-item__count count']/div/div/button[2]");
-        for(int i=1;i != changeTo;i++) {
-            addMoreButton.click();
-        }
-    }
-
-    @Step("Уменьшение количества товара '{productId}' на '{changeTo}' в корзине")
-    public void reduceProductAmount(String productId, int changeTo) {
-        SelenideElement reduceButton = $x("//div[@data-nm='" + productId + "']/../../../div[@class='list-item__count count']/div/div/button[1]"),
-                amountText = $x("//div[@data-nm='" + productId + "']/../../../div[@class='list-item__count count']/div/div/input");
-        for(int i = Integer.parseInt(Objects.requireNonNull(amountText.getAttribute("value"))); i != changeTo; i--) {
-            reduceButton.click();
+    @Step("Нажатие кнопки '{typeOfAction}' в количестве '{numberOfClicks}' у товара '{productId}'")
+    public void clickOnProductAmount(String productId, String typeOfAction, int numberOfClicks) {
+        // 2 = plus, 1 = minus
+        if (typeOfAction.equals("Add")) {
+            typeOfAction = "count__plus plus";
+        } else typeOfAction = "count__minus minus";
+        SelenideElement button = $x("//div[@data-nm='" + productId + "']/../../../div[@class='list-item__count count']/div/div/button[@class='" + typeOfAction + "']");
+        for (int i = 0; i != numberOfClicks; i++) {
+            button.click();
         }
     }
 
@@ -73,7 +76,19 @@ public class BasketPage {
 
     @Step("Получить количество товара '{productId}'")
     public String getProductAmount(String productId) {
-//        return Integer.parseInt(Objects.requireNonNull($x("//div[@data-nm='" + productId + "']/../../../div[@class='list-item__count count']/div/div/input").getAttribute("value")));
         return $x("//div[@data-nm='" + productId + "']/../../../div[@class='list-item__count count']/div/div/input").getAttribute("value");
+    }
+
+    @Step("Проверка неактивности кнопки уменьшения количества товара '{productId}'")
+    public void reduceAmountWhenInactive(String productId) {
+        SelenideElement reduceButton = $x("//div[@data-nm='" + productId + "']/../../../div[@class='list-item__count count']/div/div/button[1]");
+        String count = getProductAmount(productId);
+//        reduceButton.shouldBe(Condition.disabled);
+//        Element should disabled {By.xpath: //div[@data-nm='47475063']/../../../div[@class='list-item__count count']/div/div/button[1]}
+//            Element: '<button class="count__minus minus disabled" data-link="class{merge: quantity <= minQuantity toggle='disabled'}" type="button"></button>'
+//            Actual value: enabled
+        reduceButton.shouldBe(Condition.cssClass("disabled"));
+        reduceButton.click();
+        Assert.assertEquals(getProductAmount(productId), count);
     }
 }

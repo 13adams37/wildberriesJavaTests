@@ -1,5 +1,6 @@
 package tests;
 
+import io.qameta.allure.TmsLink;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -16,25 +17,45 @@ public class ProductTest extends BasePage {
         open(Urls.MAIN_PAGE.getUrl());
     }
 
-    @Test(description = "Проверка делатей товара в корзине")
-    public void addProductToCartByIdCheck() {
+    @TmsLink("https://app.qase.io/case/WBP-12")
+    @Test(description = "Добавление товара в корзину и изменение количества")
+    public void productTest() {
         wildberriesMainPage.searchProduct(productId);
+
         productPage.addProductToBasket();
+        productPage.checkAddCartButtonReplaced();
         productPage.getProductDetails();
+
         productPage.goToBasket();
         basketPage.assertProductDetailsInBasket(productId, productPage.productDetails);
-        basketPage.deleteProduct(productId);
-        basketPage.checkBasketEmptiness();
-    }
 
-    @Test(description = "Изменения количества товара")
-    public void changeProductAmountCheck() {
-        wildberriesMainPage.searchProduct(productId);
-        productPage.addProductToBasket();
-        productPage.goToBasket();
-        basketPage.addProductAmount(productId,6);
-        basketPage.reduceProductAmount(productId, 2);
+        basketPage.reduceAmountWhenInactive(productId);
+
+        basketPage.clickOnProductAmount(productId, "Add", 1);
+
+        basketPage.clickOnProductAmount(productId, "Reduce", 1);
+        basketPage.reduceAmountWhenInactive(productId);
+        // price check
+
         basketPage.setProductAmount(productId, "10");
         Assert.assertEquals(basketPage.getProductAmount(productId),"10");
+        // price check
+
+        basketPage.setProductAmount(productId, "2");
+        // price?
+
+        basketPage.setProductAmount(productId, "2q");
+
+        basketPage.setProductAmount(productId, "q2");
+
+        basketPage.clickOnProductAmount(productId, "Add", 1);
+        basketPage.catchInvalidDataPopup();
+
+        basketPage.clickOnProductAmount(productId, "Reduce", 1);
+        basketPage.catchInvalidDataPopup();
+        Assert.assertEquals(basketPage.getProductAmount(productId), "NaN");
+
+        basketPage.deleteProduct(productId);
+        basketPage.checkBasketEmptiness();
     }
 }

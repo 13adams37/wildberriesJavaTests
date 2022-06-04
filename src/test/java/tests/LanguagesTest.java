@@ -1,5 +1,6 @@
 package tests;
 
+import io.qameta.allure.TmsLink;
 import org.testng.SkipException;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
@@ -25,6 +26,7 @@ public class LanguagesTest extends BasePage {
         open(Urls.MAIN_PAGE.getUrl());
     }
 
+    @TmsLink("https://app.qase.io/case/WBP-11")
     @Test(dataProvider = "languageCodes")
     public void checkLanguages(String languageCode) {
         if (languageCode.equals("IL") || languageCode.equals("KG"))

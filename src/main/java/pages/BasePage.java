@@ -9,9 +9,6 @@ import org.testng.annotations.Parameters;
 import static com.codeborne.selenide.Selenide.$x;
 
 public class BasePage {
-
-    public static SelenideElement
-            basketButton = $x("//a[@data-wba-header-name='Cart']");
     private final RunnerConfig config = new RunnerConfig();
     public WildberriesMainPage wildberriesMainPage = new WildberriesMainPage();
     public SearchPage searchPage = new SearchPage();

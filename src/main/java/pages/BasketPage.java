@@ -19,14 +19,15 @@ public class BasketPage {
             emptyBasketText = $x("//div[@class='basket-page__basket-empty basket-empty']/h1");
 
     @Step("Проверка отображения алерта об ошибке входных данных")
-    public void catchInvalidDataPopup() {
+    public BasketPage catchInvalidDataPopup() {
         popupAlertInvalidData.shouldBe(Condition.visible);
         popupAlertInvalidData.lastChild().click();
         popupAlertInvalidData.shouldNotBe(Condition.visible);
+        return this;
     }
 
     @Step("Проверка детелай товара '{productId}' в корзине")
-    public void assertProductDetailsInBasket(String productId, String[] productDetails) {
+    public BasketPage assertProductDetailsInBasket(String productId, String[] productDetails) {
         String cartProductBrandName = $x("//div[@data-nm='" + productId + "']/../a/span[@class='good-info__good-brand']").text();
         String cartProductGoodsName = $x("//div[@data-nm='" + productId + "']/../a/span[@class='good-info__good-name']").text();
         SelenideElement cartProductPrice = $x("//div[@data-nm='" + productId + "']/../../../div[@class='list-item__price']/div[1]");
@@ -38,22 +39,25 @@ public class BasketPage {
         Assert.assertEquals(cartProductGoodsName.substring(0, cartProductGoodsName.length() - 1), productDetails[1]);
         Assert.assertEquals(cartProductPrice.text(), productDetails[2]);
         Assert.assertEquals(cartProductSeller, productDetails[3]);
+        return this;
     }
 
     @Step("Удаление товара '{productId}'")
-    public void deleteProduct(String productId) {
+    public BasketPage deleteProduct(String productId) {
         SelenideElement deleteItem = $x("//div[@data-nm='" + productId + "']/../../../div[@class='list-item__count count']/div[@class='list-item__btn btn ']/button[2]");
         deleteItem.hover().click();
+        return this;
     }
 
     @Step("Проверка пустоты корзины")
-    public void checkBasketEmptiness() {
+    public BasketPage checkBasketEmptiness() {
         emptyBasket.shouldBe(Condition.visible);
         emptyBasketText.shouldBe(Condition.exactText("В корзине пока ничего нет"));
+        return this;
     }
 
     @Step("Нажатие кнопки '{typeOfAction}' в количестве '{numberOfClicks}' у товара '{productId}'")
-    public void clickOnProductAmount(String productId, String typeOfAction, int numberOfClicks) {
+    public BasketPage clickOnProductAmount(String productId, String typeOfAction, int numberOfClicks) {
         // 2 = plus, 1 = minus
         if (typeOfAction.equals("Add")) {
             typeOfAction = "count__plus plus";
@@ -62,16 +66,18 @@ public class BasketPage {
         for (int i = 0; i != numberOfClicks; i++) {
             button.click();
         }
+        return this;
     }
 
     @Step("Установить количество товара '{productId} на значение '{changeTo}''")
-    public void setProductAmount(String productId, String changeTo) {
+    public BasketPage setProductAmount(String productId, String changeTo) {
         SelenideElement amountText = $x("//div[@data-nm='" + productId + "']/../../../div[@class='list-item__count count']/div/div/input");
         amountText.click();
         amountText.sendKeys(Keys.CONTROL + "a");
         amountText.sendKeys(Keys.BACK_SPACE);
         amountText.sendKeys(changeTo);
         amountText.pressTab();
+        return this;
     }
 
     @Step("Получить количество товара '{productId}'")
@@ -80,7 +86,7 @@ public class BasketPage {
     }
 
     @Step("Проверка неактивности кнопки уменьшения количества товара '{productId}'")
-    public void reduceAmountWhenInactive(String productId) {
+    public BasketPage reduceAmountWhenInactive(String productId) {
         SelenideElement reduceButton = $x("//div[@data-nm='" + productId + "']/../../../div[@class='list-item__count count']/div/div/button[1]");
         String count = getProductAmount(productId);
 //        reduceButton.shouldBe(Condition.disabled);
@@ -90,5 +96,11 @@ public class BasketPage {
         reduceButton.shouldBe(Condition.cssClass("disabled"));
         reduceButton.click();
         Assert.assertEquals(getProductAmount(productId), count);
+        return this;
+    }
+
+    public BasketPage checkProductAmount(String n1, String n2) {
+        Assert.assertEquals(n1,n2);
+        return this;
     }
 }

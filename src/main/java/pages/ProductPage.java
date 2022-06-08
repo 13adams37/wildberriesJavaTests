@@ -1,11 +1,8 @@
 package pages;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.SelenideWait;
 import io.qameta.allure.Step;
-import org.openqa.selenium.WebDriver;
 
 import java.time.Duration;
 
@@ -25,31 +22,35 @@ public class ProductPage {
     public String[] productDetails;
 
     @Step("Добавить товар в корзину")
-    public void addProductToBasket() {
+    public ProductPage addProductToBasket() {
         addToCartButton.click();
         productAddedSuccessfulPopup.shouldBe(Condition.visible, Condition.exist);
         productAddedSuccessfulPopup.shouldHave(Condition.exactText("Товар успешно добавлен в корзину")); // ????
         productAddedSuccessfulPopup.shouldNotBe(Condition.visible, Duration.ofSeconds(5));
+        return this;
     }
 
     @Step("Перейти в корзину с кнопки страницы товара")
-    public void goToBasket() {
+    public ProductPage goToBasket() {
         goToCartButton.shouldBe(Condition.visible).click();
+        return this;
     }
 
     @Step("Сохранить детали товара")
-    public void getProductDetails() {
+    public ProductPage getProductDetails() {
         String brandName = productBrandName.text();
         String goodsName = productGoodsName.text();
         String price = productPrice.text();
         String sellerName = productSellerName.text();
         productDetails = new String[]{brandName, goodsName, price, sellerName};
+        return this;
     }
 
     @Step("Проверка замены кнопки 'Добавить в корзину' на 'Перейти в корзину'")
-    public void checkAddCartButtonReplaced() {
+    public ProductPage checkAddCartButtonReplaced() {
         goToCartButton.shouldBe(Condition.visible);
         addToCartButton.shouldNotBe(Condition.visible);
+        return this;
     }
 
 }

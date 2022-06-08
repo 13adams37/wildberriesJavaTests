@@ -17,21 +17,24 @@ public class WildberriesMainPage {
 
 
     @Step("Нажать на кнопку языка '{countryCode}'")
-    public void pressButtonWithLanguage(String countryCode) {
+    public WildberriesMainPage pressButtonWithLanguage(String countryCode) {
         countryHover.hover();
         $x("//input[@value='" + transformCountryCodeToLanguage(countryCode)[0] + "']/..").click();
+        return this;
     }
 
     @Step("Проверка отображения города доставки '{countryCode}'")
-    public void checkCountyDeliveryCity(String countryCode) {
+    public WildberriesMainPage checkCountyDeliveryCity(String countryCode) {
         countryCity.shouldHave(Condition.exactText(transformCountryCodeToLanguage(countryCode)[1]));
+        return this;
     }
 
     @Step("Поиск товара '{productName}'")
-    public void searchProduct(String productName) {
+    public WildberriesMainPage searchProduct(String productName) {
         searchInput.click();
         searchInput.sendKeys(productName);
         searchInput.pressEnter();
+        return this;
     }
 
 }

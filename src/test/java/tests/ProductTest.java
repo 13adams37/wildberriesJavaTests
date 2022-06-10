@@ -4,6 +4,7 @@ import io.qameta.allure.TmsLink;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pages.BasePage;
+import test_data.Product;
 import test_data.Urls;
 
 import static com.codeborne.selenide.Selenide.open;
@@ -21,10 +22,10 @@ public class ProductTest extends BasePage {
     public void productTest() {
         wildberriesMainPage.searchProduct(productId);
         productPage.addProductToBasket()
-                .checkAddCartButtonReplaced()
-                .getProductDetails()
-                .goToBasket();
-        basketPage.assertProductDetailsInBasket(productId, productPage.productDetails)
+                .checkAddCartButtonReplaced();
+        Product product = new Product().getProductDetails();
+                productPage.goToBasket();
+        basketPage.assertProductDetailsInBasket(productId, product)
                 .reduceAmountWhenInactive(productId)
                 .clickOnProductAmount(productId, "Add", 1)
                 .clickOnProductAmount(productId, "Reduce", 1)

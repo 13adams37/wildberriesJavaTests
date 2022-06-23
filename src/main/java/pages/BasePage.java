@@ -1,12 +1,10 @@
 package pages;
 
-import com.codeborne.selenide.SelenideElement;
 import config.RunnerConfig;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 
-import static com.codeborne.selenide.Selenide.$x;
 
 public class BasePage {
     private final RunnerConfig config = new RunnerConfig();
@@ -14,6 +12,7 @@ public class BasePage {
     public SearchPage searchPage = new SearchPage();
     public ProductPage productPage = new ProductPage();
     public BasketPage basketPage = new BasketPage();
+    public LoginPage loginPage = new LoginPage();
 
     @BeforeClass
     @Parameters({"browser", "browserVersion"})

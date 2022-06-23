@@ -13,6 +13,7 @@ public class WildberriesMainPage {
 
             countryHover = $x("//span[@data-wba-header-name='Country']"),
             countryCity = $x("//span[@data-wba-header-name='DLV_Adress']"),
+            loginButton = $x("//a[@data-wba-header-name=\"Login\"]"),
             searchInput = $("#searchInput");
 
 
@@ -34,6 +35,12 @@ public class WildberriesMainPage {
         searchInput.click();
         searchInput.sendKeys(productName);
         searchInput.pressEnter();
+        return this;
+    }
+
+    @Step("Переход на страницу авторизации")
+    public WildberriesMainPage goToLoginPage() {
+        loginButton.click();
         return this;
     }
 
